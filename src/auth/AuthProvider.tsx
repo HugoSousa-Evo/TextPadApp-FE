@@ -35,7 +35,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
             })
             const res = await response.json();
             if (res) {
-                console.log("token: " + res);
                 setUser({name: username});
                 setToken(res);
                 localStorage.setItem("token", res)
@@ -59,7 +58,6 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({
             })
             const res = await response.json();
             if (res) {
-                console.log("token: " + res);
                 setUser({name: username});
                 setToken(res);
                 localStorage.setItem("token", res)

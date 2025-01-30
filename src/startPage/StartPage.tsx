@@ -1,5 +1,6 @@
 import React from "react";
 import { useAuth } from "../auth/AuthProvider";
+import { Navigate, useNavigate } from "react-router";
 
 export const StartPage: React.FC = () => {
 
@@ -7,6 +8,7 @@ export const StartPage: React.FC = () => {
     const logInBtn = React.useRef<HTMLButtonElement>(null);
     const [username, setUsername] = React.useState<string | undefined>(undefined);
     const auth = useAuth();
+    const navigate = useNavigate();
 
     const onUsernameChange = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         const newUsername = e.currentTarget.value;
@@ -23,7 +25,7 @@ export const StartPage: React.FC = () => {
         logInBtn.current!.disabled = true
         auth.register(username!).then(requestComplete => {
             if(requestComplete){
-                // Redirect ??
+                navigate("/userpage")
             }
             else {
                 alert("something went wrong")
@@ -34,7 +36,7 @@ export const StartPage: React.FC = () => {
     const logUser = React.useCallback(() => {
         auth.logIn(username!).then(requestComplete => {
             if(requestComplete){
-                // Redirect ??
+                navigate("/userpage")
             }
             else {
                 alert("something went wrong")

@@ -5,7 +5,7 @@ import { useAuth } from "../auth/AuthProvider";
 import { Insert } from "./operations/Insert";
 import { Delete } from "./operations/Delete";
 
-interface TextpadProps {
+export interface TextpadProps {
     filename: string,
     owner: User
 }
@@ -60,6 +60,21 @@ export const Textpad: React.FC<TextpadProps> = (props) => {
         
     }, [])
 
+    const getFileContents = async () => {
+        try {
+            const response = await fetch("http://localhost:9002/" + props.filename + "/file?owner=" + props.owner, {
+                method: 'GET',
+                headers: {
+                    "Authorization":"Bearer " + auth.token
+                }
+            })
+            const res = await response.text();
+            textareaRef.current!.value += res
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     // --------------------------------------
 
     // React is dumb and no event class lets me read what was added into the textbox so I made this, yay
@@ -83,9 +98,12 @@ export const Textpad: React.FC<TextpadProps> = (props) => {
     React.useEffect(() => {
         if(textareaRef.current !== null && !load) {
             textareaRef.current.oninput = handleInput
+
+            getFileContents();
+
             setLoad(true)
         }
-    }, [textareaRef, load])
+    }, [textareaRef, load, props])
 
     // -------------------------------------
 
