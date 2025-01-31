@@ -29,17 +29,23 @@ export const StartPage: React.FC = () => {
             }
             else {
                 alert("something went wrong")
+                signInBtn.current!.disabled = false
+                logInBtn.current!.disabled = false
             }
         })
     }, [username])
 
     const logUser = React.useCallback(() => {
+        signInBtn.current!.disabled = true
+        logInBtn.current!.disabled = true
         auth.logIn(username!).then(requestComplete => {
             if(requestComplete){
                 navigate("/userpage")
             }
             else {
                 alert("something went wrong")
+                signInBtn.current!.disabled = false
+                logInBtn.current!.disabled = false
             }
         })
     }, [username])

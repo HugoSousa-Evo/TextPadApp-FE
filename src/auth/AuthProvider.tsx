@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { User } from "../userPage/userView/User";
 
-interface AuthContextI {
+export interface AuthContextI {
     token: string,
     currentUser: User,
     register: (username: string) => Promise<Boolean>

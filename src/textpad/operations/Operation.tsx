@@ -1,3 +1,6 @@
 export abstract class Operation {
-    public toJson = () => JSON.stringify(this)
+
+    public sentBy: string = "";
+
+    public toJsonString = (type: string) => `{\"${type}\":${JSON.stringify(this)}}`
 }

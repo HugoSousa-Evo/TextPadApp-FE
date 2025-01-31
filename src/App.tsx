@@ -1,4 +1,4 @@
-import { BrowserRouter, Route, Routes } from 'react-router';
+import { BrowserRouter, Navigate, Route, Routes, useNavigate } from 'react-router';
 import './App.css';
 import { AuthProvider } from './auth/AuthProvider';
 import { StartPage } from './startPage/StartPage';
@@ -21,8 +21,9 @@ function App() {
       <BrowserRouter>
         <AuthProvider>
           <Routes>
+            <Route path='' element={<Navigate to="/startpage" />} />
 
-            <Route path='' element={<StartPage />} />
+            <Route path='startpage' element={<StartPage />} />
 
             <Route element={<PrivateRoute />} >
               <Route path='userpage' element={ <UserPage setCurrentDocument={(filename:string, owner:User) => setCurrentDocument({

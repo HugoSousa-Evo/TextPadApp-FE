@@ -28,6 +28,9 @@ export class WebsocketController {
     }
 
     public send(msg: string) {
+        console.log("sent")
         this.socket.send(msg)
     }
+
+    // Add close logic when user leaves
 } 
