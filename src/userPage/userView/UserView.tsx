@@ -14,7 +14,7 @@ export const UserView: React.FC<UserViewProps> = (props) => {
     }, [props])
 
     return (
-        <div>
+        <div className="UserView">
             <h3>User List</h3>
             <button onClick={handleRefresh} >Refresh</button>
             {

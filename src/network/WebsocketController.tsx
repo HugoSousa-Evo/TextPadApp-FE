@@ -1,3 +1,4 @@
+import { Close } from "../textpad/operations/Close"
 import { User } from "../userPage/userView/User"
 
 export class WebsocketController {
@@ -17,6 +18,7 @@ export class WebsocketController {
         this.defaultConnection[3] = token
         this.defaultConnection[5] = owner.name
         this.socket = new WebSocket(this.defaultConnection.join(""))
+        console.log("connected")
     }
 
     public setOnMessage(callback: (ev: MessageEvent) => void) {
@@ -28,9 +30,16 @@ export class WebsocketController {
     }
 
     public send(msg: string) {
-        console.log("sent")
         this.socket.send(msg)
     }
 
-    // Add close logic when user leaves
+    public setOnClose(callback: (ev: CloseEvent) => void) {
+        this.socket.onclose = callback
+    }
+
+    public close() { 
+        if (this.socket.OPEN) {
+            this.socket.send(new Close().toJson())
+        }
+     }
 } 

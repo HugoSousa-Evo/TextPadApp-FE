@@ -9,7 +9,7 @@ export const UserDisplay: React.FC<UserDisplayProps> = (props) => {
 
     return (
         <div>
-            <h4>User: {props.user.name}</h4>
+            <h4>Username: {props.user.name}</h4>
         </div>
     )
 }

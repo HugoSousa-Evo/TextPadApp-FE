@@ -59,12 +59,12 @@ export const StartPage: React.FC = () => {
     }, [username])
 
     return (
-        <div>
-            <label><b>Username</b></label>
-            <input id="user" type="text" placeholder="Enter Username" name="uname" onChange={onUsernameChange} required />
+        <div className="StartPage" >
+            <label id="usernameStartPage" htmlFor="usernameStartPageInput"><b>Username</b></label>
+            <input id="usernameStartPageInput" type="text" placeholder="Enter Username" name="uname" onChange={onUsernameChange} required />
 
-            <button ref={signInBtn} onClick={signUser} type="submit" > SignIn </button>
-            <button ref={logInBtn} onClick={logUser} type="submit" > Login </button>
+            <button className="StartPageButton" ref={signInBtn} onClick={signUser} type="submit" > SignIn </button>
+            <button className="StartPageButton" ref={logInBtn} onClick={logUser} type="submit" > Login </button>
         </div>
     )
 }

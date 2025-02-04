@@ -50,7 +50,7 @@ export const FileSearch: React.FC<FileSearchProps> = (props) => {
     }, [username, documents, setDocuments]);
 
     return (
-        <div>
+        <div className="FileSearch" >
             <h3>Search user files</h3>
             <input id="user" type="text" placeholder="Enter Username" name="uname" onChange={onUsernameChange} />
             <button onClick={searchFile} >Search</button>

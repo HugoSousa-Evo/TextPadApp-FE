@@ -21,7 +21,7 @@ function App() {
       <BrowserRouter>
         <AuthProvider>
           <Routes>
-            <Route path='' element={<Navigate to="/startpage" />} />
+            <Route path='' element={<Navigate to="/" />} />
 
             <Route path='startpage' element={<StartPage />} />
 

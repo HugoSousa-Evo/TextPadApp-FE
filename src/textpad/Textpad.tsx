@@ -13,11 +13,11 @@ export const Textpad: React.FC<TextpadProps> = (props) => {
 
     const textareaRef = React.useRef<HTMLTextAreaElement>(null);
     const auth = useAuth();
-    const socket = new WebsocketController(props.filename, auth.token, props.owner);
+    const socket = React.useRef<WebsocketController | null>(null);
 
     const getFileContents = async () => {
         try {
-            const response = await fetch("http://localhost:9002/" + props.filename + "/file?owner=" + props.owner, {
+            const response = await fetch("http://localhost:9002/" + props.filename + "/file?owner=" + props.owner.name, {
                 method: 'GET',
                 headers: {
                     "Authorization":"Bearer " + auth.token
@@ -30,29 +30,40 @@ export const Textpad: React.FC<TextpadProps> = (props) => {
         }
     }
 
-    const [load, setLoad] = React.useState(false)
+    const [hasLoaded, setLoad] = React.useState(false)
     
     React.useEffect(() => {
-        if(textareaRef.current !== null && !load) {
-            textareaRef.current.oninput = InputHandler(textareaRef, socket, auth)
+        
+        if(textareaRef.current !== null && !hasLoaded) {
+
+            socket.current = new WebsocketController(props.filename, auth.token, props.owner)
+
+            textareaRef.current.oninput = InputHandler(textareaRef, socket.current, auth)
+
+            socket.current.setOnMessage(onWebsocketMessage(textareaRef, auth))
+            socket.current.setOnError((ev: Event) => console.log(ev))
+            socket.current.setOnClose((_: CloseEvent) => console.log("connection terminated"))
 
             getFileContents();
 
-            socket.setOnMessage(onWebsocketMessage(textareaRef, auth))
-            socket.setOnError((ev: Event) => console.log(ev))
-
             setLoad(true)
         }
-    }, [textareaRef, load, props])
+
+    }, [textareaRef, hasLoaded, props])
+
+    // close the socket when client leaves
+    React.useEffect(() => {
+        return () => socket.current?.close()
+    }, [])
 
 
     return (
-        <div>
+        <>
             <textarea 
                 id="textbox"
                 ref={textareaRef}
-                onKeyDown={KeydownHandler(textareaRef, socket, auth)}
+                onKeyDown={KeydownHandler(textareaRef, socket.current!, auth)}
                 spellCheck="false" />
-        </div>
+        </>
     )
 }

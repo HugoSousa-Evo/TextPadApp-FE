@@ -66,11 +66,6 @@ export const InputHandler = (
         // handles copy and paste text as well
         const ev = e as InputEvent
         if(ev.data != null) {
-            console.log(new Insert(
-                textareaRef.current!.selectionStart - ev.data.length,
-                ev.data,
-                auth.currentUser
-            ).toJson())
             socket.send(new Insert(
                 textareaRef.current!.selectionStart - ev.data.length,
                 ev.data,
@@ -110,17 +105,13 @@ export const onWebsocketMessage = (
         }
     }
 
-
     return (ev: MessageEvent) => {
         const message = JSON.parse(ev.data)
-        console.log(message)
         if (message.sentBy !== auth.currentUser.name) {
             if (message.type === "insert") {
-                console.log("Inserted")
                 Insert(message.position, message.content)
             }
             else if (message.type === "delete") {
-                console.log("Deleted")
                 Delete(message.position, message.amount)
             }
         }

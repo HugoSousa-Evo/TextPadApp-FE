@@ -107,7 +107,7 @@ export const UserPage: React.FC<UserPageProps> = (props) => {
     
 
     return (
-        <div>
+        <div className="UserPage" >
             <div>
                 <label><b>Create a file</b></label>
                 <input id="create" type="text" placeholder="Enter Filename" name="create" onChange={filenameCreateChange} />
