@@ -7,6 +7,7 @@ import { User } from "../userView/User";
 interface DocumentPanelProps {
     document: DocumentView
     setCurrentDocument: (filename: string, owner: User) => void
+    refresh: () => Promise<void>
 }
 
 export const DocumentPanel: React.FC<DocumentPanelProps> = (props) => {
@@ -28,7 +29,7 @@ export const DocumentPanel: React.FC<DocumentPanelProps> = (props) => {
             })
             const res = await response.text();
             console.log(res)
-            
+            props.refresh();
         } catch (error) {
             console.log(error)
         }

@@ -3,6 +3,7 @@ import { UserView } from "./userView/UserView";
 import { FileSearch } from "./fileSearch/FileSearch";
 import { User } from "./userView/User";
 import { useAuth } from "../auth/AuthProvider";
+import "./UserPage.css"
 
 
 interface UserPageProps {
@@ -108,17 +109,19 @@ export const UserPage: React.FC<UserPageProps> = (props) => {
 
     return (
         <div className="UserPage" >
-            <div>
-                <label><b>Create a file</b></label>
-                <input id="create" type="text" placeholder="Enter Filename" name="create" onChange={filenameCreateChange} />
+            <div className="user-actions">
+                <div>
+                    <label><b>Create a file</b></label>
+                    <input id="create" type="text" placeholder="Enter Filename" name="create" onChange={filenameCreateChange} />
 
-                <button onClick={createFile} type="submit" >Create</button>
-            </div>
-            <div>
-                <label><b>Allow user to edit file you own</b></label>
-                <input id="guest" type="text" placeholder="Enter Guest Username" name="guest" onChange={userInviteChange} />
-                <input id="ownedFile" type="text" placeholder="Enter Filename" name="ownedFile" onChange={filenameInviteChange} />
-                <button onClick={inviteUser} type="submit" >Allow</button>
+                    <button onClick={createFile} type="submit" >Create</button>
+                </div>
+                <div>
+                    <label><b>Allow user to edit file you own</b></label>
+                    <input id="guest" type="text" placeholder="Enter Guest Username" name="guest" onChange={userInviteChange} />
+                    <input id="ownedFile" type="text" placeholder="Enter Filename" name="ownedFile" onChange={filenameInviteChange} />
+                    <button onClick={inviteUser} type="submit" >Allow</button>
+                </div>
             </div>
             <UserView userList={userList} refresh={getUsernames} />
             <FileSearch setCurrentDocument={props.setCurrentDocument}/>

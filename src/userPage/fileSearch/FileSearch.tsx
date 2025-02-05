@@ -54,9 +54,11 @@ export const FileSearch: React.FC<FileSearchProps> = (props) => {
             <h3>Search user files</h3>
             <input id="user" type="text" placeholder="Enter Username" name="uname" onChange={onUsernameChange} />
             <button onClick={searchFile} >Search</button>
+            <div className="documents">
             {
-                documents.map((documentView, index) => <DocumentPanel key={index} document={documentView} setCurrentDocument={props.setCurrentDocument} />)
+                documents.map((documentView, index) => <DocumentPanel key={index} document={documentView} setCurrentDocument={props.setCurrentDocument} refresh={searchFile} />)
             }
+            </div>
         </div>
     )
 }

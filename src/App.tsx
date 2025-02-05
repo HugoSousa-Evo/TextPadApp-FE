@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Route, Routes, useNavigate } from 'react-router';
+import { BrowserRouter, Navigate, Route, Routes } from 'react-router';
 import './App.css';
 import { AuthProvider } from './auth/AuthProvider';
 import { StartPage } from './startPage/StartPage';
@@ -21,7 +21,7 @@ function App() {
       <BrowserRouter>
         <AuthProvider>
           <Routes>
-            <Route path='' element={<Navigate to="/" />} />
+            <Route path='' element={<Navigate to="/startpage" />} />
 
             <Route path='startpage' element={<StartPage />} />
 

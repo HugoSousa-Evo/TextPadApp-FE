@@ -1,4 +1,5 @@
 import React from "react";
+import "./Textpad.css"
 import { WebsocketController } from "../network/WebsocketController";
 import { User } from "../userPage/userView/User";
 import { useAuth } from "../auth/AuthProvider";
