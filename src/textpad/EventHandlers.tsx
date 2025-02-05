@@ -32,7 +32,7 @@ export const KeydownHandler = (
 
             const deleteMsg = new Delete(0,0, auth.currentUser);
             
-            if(amount == 0) {
+            if(amount === 0) {
                 
                 deleteMsg.amount = 1
                 deleteMsg.position = Math.max(s - 1, 0)
@@ -65,7 +65,7 @@ export const InputHandler = (
         // if content was inserted.  not newlines | tabs | backspace / delete 
         // handles copy and paste text as well
         const ev = e as InputEvent
-        if(ev.data != null) {
+        if(ev.data !== null) {
             socket.send(new Insert(
                 textareaRef.current!.selectionStart - ev.data.length,
                 ev.data,
@@ -83,7 +83,7 @@ export const onWebsocketMessage = (
     const Insert = (position: number, content: string) => {
         const txt = textareaRef.current!.value
 
-        if(position == 0) {
+        if(position === 0) {
             textareaRef.current!.value = content + txt
         }
         if(position >= txt.length){
@@ -97,7 +97,7 @@ export const onWebsocketMessage = (
     const Delete = (position: number, amount: number) => {
         const txt = textareaRef.current!.value
 
-        if(position == 0) {
+        if(position === 0) {
             textareaRef.current!.value = txt.substring(amount)
         }
         else{

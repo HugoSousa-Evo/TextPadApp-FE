@@ -16,7 +16,7 @@ export const Textpad: React.FC<TextpadProps> = (props) => {
     const auth = useAuth();
     const socket = React.useRef<WebsocketController | null>(null);
 
-    const getFileContents = async () => {
+    const getFileContents = React.useCallback(async () => {
         try {
             const response = await fetch("http://localhost:9002/" + props.filename + "/file?owner=" + props.owner.name, {
                 method: 'GET',
@@ -29,7 +29,7 @@ export const Textpad: React.FC<TextpadProps> = (props) => {
         } catch (error) {
             console.log(error)
         }
-    }
+    }, [auth, props])
 
     const [hasLoaded, setLoad] = React.useState(false)
     
@@ -50,7 +50,7 @@ export const Textpad: React.FC<TextpadProps> = (props) => {
             setLoad(true)
         }
 
-    }, [textareaRef, hasLoaded, props])
+    }, [textareaRef, hasLoaded, props, auth, getFileContents])
 
     // close the socket when client leaves
     React.useEffect(() => {

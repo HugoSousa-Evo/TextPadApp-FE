@@ -19,7 +19,7 @@ export const StartPage: React.FC = () => {
         else {
             setUsername(undefined);
         }
-    }, [username, setUsername])
+    }, [setUsername])
 
     const signUser = React.useCallback(() => {
         signInBtn.current!.disabled = true
@@ -34,7 +34,7 @@ export const StartPage: React.FC = () => {
                 logInBtn.current!.disabled = false
             }
         })
-    }, [username])
+    }, [username, auth, navigate])
 
     const logUser = React.useCallback(() => {
         signInBtn.current!.disabled = true
@@ -49,7 +49,7 @@ export const StartPage: React.FC = () => {
                 logInBtn.current!.disabled = false
             }
         })
-    }, [username])
+    }, [username, auth, navigate])
 
     React.useEffect(() => {
         if (signInBtn.current !== null && logInBtn.current !== null) {

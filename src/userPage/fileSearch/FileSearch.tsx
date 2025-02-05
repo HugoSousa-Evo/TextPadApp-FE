@@ -16,7 +16,7 @@ export const FileSearch: React.FC<FileSearchProps> = (props) => {
 
     const onUsernameChange = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         setUsername(e.currentTarget.value);
-    }, [username, setUsername]);
+    }, [setUsername]);
 
     const searchFile = React.useCallback(async () => {
         const newDocs: DocumentView[] = [];
@@ -47,7 +47,7 @@ export const FileSearch: React.FC<FileSearchProps> = (props) => {
         } catch (error) {
             console.log(error);
         }
-    }, [username, documents, setDocuments]);
+    }, [username, setDocuments, auth]);
 
     return (
         <div className="FileSearch" >

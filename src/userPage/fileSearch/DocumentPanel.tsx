@@ -1,7 +1,7 @@
 import React from "react";
 import { DocumentView } from "./DocumentView";
 import { useAuth } from "../../auth/AuthProvider";
-import { Navigate, useNavigate } from "react-router";
+import { useNavigate } from "react-router";
 import { User } from "../userView/User";
 
 interface DocumentPanelProps {
@@ -35,14 +35,14 @@ export const DocumentPanel: React.FC<DocumentPanelProps> = (props) => {
         }
         
         
-    }, [props])
+    }, [props, auth])
 
     const editFile = React.useCallback(() => {
 
         props.setCurrentDocument(props.document.name, {name: props.document.owner})
         nav("/textpad")
         
-    }, [props])
+    }, [props, nav])
 
     return (
         <div>
