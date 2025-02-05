@@ -6,6 +6,7 @@ import { User } from "../userView/User";
 
 interface FileSearchProps {
     setCurrentDocument: (filename: string, owner: User) => void
+    refresh: [boolean, (b: boolean) => void]
 } 
 
 export const FileSearch: React.FC<FileSearchProps> = (props) => {
@@ -48,6 +49,15 @@ export const FileSearch: React.FC<FileSearchProps> = (props) => {
             console.log(error);
         }
     }, [username, setDocuments, auth]);
+
+    React.useEffect(() => {
+
+        if(props.refresh[0]){
+            searchFile();
+            props.refresh[1](false);
+        }
+
+    }, [props, searchFile])
 
     return (
         <div className="FileSearch" >

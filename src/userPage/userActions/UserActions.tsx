@@ -1,7 +1,7 @@
 import React from "react";
 import { useAuth } from "../../auth/AuthProvider";
 
-export const UserActions: React.FC = () => {
+export const UserActions: React.FC<{ setCreateFlag: (b: boolean) => void }> = (props) => {
 
     const auth = useAuth();
 
@@ -38,7 +38,7 @@ export const UserActions: React.FC = () => {
                 })
                 const res = await response.text();
                 console.log(res)
-                
+                props.setCreateFlag(true);
             } catch (error) {
                 console.log(error)
             }
@@ -46,7 +46,7 @@ export const UserActions: React.FC = () => {
         else {
             console.log("not a valid filename")
         }
-    }, [filenameCreate, auth])
+    }, [filenameCreate, auth, props])
 
     const inviteUser = React.useCallback(async () => {
         try {
@@ -58,7 +58,6 @@ export const UserActions: React.FC = () => {
             });
             const res = await response.text();
             console.log(res);
-            
         } catch (error) {
             console.log(error);
         }
