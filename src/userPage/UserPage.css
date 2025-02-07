@@ -33,3 +33,8 @@
     grid-column: 1;
     grid-row: 2;
 }
+
+img {
+    width: 20%;
+    height: 20%;
+}

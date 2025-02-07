@@ -1,8 +1,8 @@
 import React from "react";
 import { DocumentView } from "./DocumentView";
-import { useAuth } from "../../auth/AuthProvider";
 import { useNavigate } from "react-router";
 import { User } from "../userView/User";
+import { useFetch } from "../../network/useFetch";
 
 interface DocumentPanelProps {
     document: DocumentView
@@ -12,30 +12,24 @@ interface DocumentPanelProps {
 
 export const DocumentPanel: React.FC<DocumentPanelProps> = (props) => {
 
-    const auth = useAuth();
     const nav = useNavigate();
 
     const deleteBtn = React.useRef<HTMLButtonElement>(null);
     const editBtn = React.useRef<HTMLButtonElement>(null);
 
+    const postDelete = useFetch(props.document.owner + "/deleteFile/" + props.document.name, 'POST');
+
     const deleteFile = React.useCallback(async () => {
         
-        try {
-            const response = await fetch("http://localhost:9002/" + props.document.owner + "/deleteFile/" + props.document.name, {
-                method: 'POST',
-                headers: {
-                    "Authorization":"Bearer " + auth.token
-                }
-            })
-            const res = await response.text();
+        const result = await postDelete();
+
+        if (result instanceof Response) {
+            const res = await result.text();
             console.log(res)
             props.refresh();
-        } catch (error) {
-            console.log(error)
-        }
-        
-        
-    }, [props, auth])
+        } else { console.log(result) }
+    
+    }, [props, postDelete])
 
     const editFile = React.useCallback(() => {
 

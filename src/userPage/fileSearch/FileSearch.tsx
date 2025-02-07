@@ -1,8 +1,8 @@
 import React from "react";
 import { DocumentView } from "./DocumentView";
 import { DocumentPanel } from "./DocumentPanel";
-import { useAuth } from "../../auth/AuthProvider";
 import { User } from "../userView/User";
+import { useFetch } from "../../network/useFetch";
 
 interface FileSearchProps {
     setCurrentDocument: (filename: string, owner: User) => void
@@ -13,7 +13,10 @@ export const FileSearch: React.FC<FileSearchProps> = (props) => {
 
     const [documents, setDocuments] = React.useState<DocumentView[]>([]);
     const [username, setUsername] = React.useState("");
-    const auth = useAuth();
+
+    const getFiles = useFetch(username + "/listFiles", 'GET');
+
+    const noFilesRef = React.useRef<HTMLParagraphElement>(null);
 
     const onUsernameChange = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         setUsername(e.currentTarget.value);
@@ -21,15 +24,12 @@ export const FileSearch: React.FC<FileSearchProps> = (props) => {
 
     const searchFile = React.useCallback(async () => {
         const newDocs: DocumentView[] = [];
-        try {
-            const response = await fetch("http://localhost:9002/" + username + "/listFiles", {
-                method: 'GET',
-                headers: {
-                    "Authorization":"Bearer " + auth.token
-                }
-            });
-            const res = await response.json() as string[];
+        const result = await getFiles();
+
+        if (result instanceof Response) {
+            const res = await result.json() as string[];
             if (res.length > 0) {
+                noFilesRef.current!.textContent = "";
                 res.forEach(fileInfo => {
                     const info = fileInfo.split("/");
                     const doc: DocumentView = {
@@ -41,14 +41,15 @@ export const FileSearch: React.FC<FileSearchProps> = (props) => {
                 setDocuments(newDocs);
             }
             else {
-                console.log("No files for that user");
+                noFilesRef.current!.textContent = "No files for that user"
                 setDocuments(newDocs);
             }
-
-        } catch (error) {
-            console.log(error);
         }
-    }, [username, setDocuments, auth]);
+        else{
+            console.log(result)
+        }
+        
+    }, [setDocuments, getFiles]);
 
     React.useEffect(() => {
 
@@ -64,6 +65,7 @@ export const FileSearch: React.FC<FileSearchProps> = (props) => {
             <h3>Search user files</h3>
             <input id="user" type="text" placeholder="Enter Username" name="uname" onChange={onUsernameChange} />
             <button onClick={searchFile} >Search</button>
+            <p ref={noFilesRef} ></p>
             <div className="documents">
             {
                 documents.map((documentView, index) => <DocumentPanel key={index} document={documentView} setCurrentDocument={props.setCurrentDocument} refresh={searchFile} />)

@@ -1,9 +1,9 @@
 import React from "react";
-import "./Textpad.css"
 import { WebsocketController } from "../network/WebsocketController";
 import { User } from "../userPage/userView/User";
 import { useAuth } from "../auth/AuthProvider";
 import { InputHandler, KeydownHandler, onWebsocketMessage } from "./EventHandlers";
+import { useFetch } from "../network/useFetch";
 
 export interface TextpadProps {
     filename: string,
@@ -16,20 +16,19 @@ export const Textpad: React.FC<TextpadProps> = (props) => {
     const auth = useAuth();
     const socket = React.useRef<WebsocketController | null>(null);
 
+    const fetchContents = useFetch(props.filename + "/file?owner=" + props.owner.name, 'GET')
+
     const getFileContents = React.useCallback(async () => {
-        try {
-            const response = await fetch("http://localhost:9002/" + props.filename + "/file?owner=" + props.owner.name, {
-                method: 'GET',
-                headers: {
-                    "Authorization":"Bearer " + auth.token
-                }
-            })
-            const res = await response.text();
-            textareaRef.current!.value = res
-        } catch (error) {
-            console.log(error)
+
+        const contents = await fetchContents()
+        
+        if (contents instanceof Response) {
+            textareaRef.current!.value = await contents.text()
         }
-    }, [auth, props])
+        else {
+            console.log(contents)
+        }
+    }, [fetchContents])
 
     const [hasLoaded, setLoad] = React.useState(false)
     
@@ -59,12 +58,14 @@ export const Textpad: React.FC<TextpadProps> = (props) => {
 
 
     return (
-        <>
+        <div className="flex-grow pl-12 pr-12">
+            <h4 className="p-8" >{props.filename}</h4>
             <textarea 
+                className="box-border border-s-black border-solid border-4 rounded-2xl p-8 w-full h-full overflow-y-scroll"
                 id="textbox"
                 ref={textareaRef}
                 onKeyDown={KeydownHandler(textareaRef, socket.current!, auth)}
                 spellCheck="false" />
-        </>
+        </div>
     )
 }
