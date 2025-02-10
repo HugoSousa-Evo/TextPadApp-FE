@@ -30,6 +30,24 @@ export const Textpad: React.FC<TextpadProps> = (props) => {
         }
     }, [fetchContents])
 
+    // If there is time do this by websocket instead
+
+    const [users, setUsers] = React.useState(0)
+
+    const fetchRoomUsers = useFetch(props.filename + "/currentUsers?owner=" + props.owner.name, 'GET')
+
+    const getCurrentUsers = React.useCallback(async () => {
+        const result = await fetchRoomUsers()
+
+        if(result.ok) {
+            const users = await result.text()
+            setUsers(parseInt(users))
+        } else {
+            console.log("error on user load")
+        }
+
+    }, [setUsers, fetchRoomUsers])
+
     const [hasLoaded, setLoad] = React.useState(false)
     
     React.useEffect(() => {
@@ -45,27 +63,48 @@ export const Textpad: React.FC<TextpadProps> = (props) => {
             socket.current.setOnClose((_: CloseEvent) => console.log("connection terminated"))
 
             getFileContents();
+            getCurrentUsers();
 
             setLoad(true)
         }
 
-    }, [textareaRef, hasLoaded, props, auth, getFileContents])
+        const interval = setInterval(() => {
+            getCurrentUsers()
+        }, 5000)
+
+        return () => clearInterval(interval)
+
+    }, [textareaRef, hasLoaded, props, auth, getFileContents, getCurrentUsers])
 
     // close the socket when client leaves
     React.useEffect(() => {
         return () => socket.current?.close()
     }, [])
 
+    // add the possiblity to edit the title if owner ??
 
     return (
-        <div className="flex-grow pl-12 pr-12">
-            <h4 className="p-8" >{props.filename}</h4>
+        <div className="flex-col px-12 pt-12  w-full">
+            <div className="text-right mr-4" >
+                <button className="border-2 border-black rounded-md py-1.5 px-4  hover:bg-slate-200 mr-2" >UserList | {users}</button>
+                <button className="border-2 border-black rounded-md py-1.5 px-4  hover:bg-slate-200" >D</button>
+            </div>
+            <div className="flex-row" >
+                <h2 className="pl-12 pb-2 underline border-dotted border-6 border-black" >{props.filename}</h2>
+                <div className="text-right mr-4 mb-1">
+                    <button className="border-2 border-black rounded-md py-1 px-4  hover:bg-slate-200 active:bg-slate-100 font-extrabold">B</button>
+                    <button className="border-2 border-black rounded-md py-1 px-4  hover:bg-slate-200 active:bg-slate-100 italic">I</button>
+                    <button className="border-2 border-black rounded-md py-1 px-4  hover:bg-slate-200 active:bg-slate-100 underline">S</button>
+                </div>
+            </div>
+            <div className="box-border border-s-black border-solid border-4 rounded-2xl p-6 w-full h-5/6" >
             <textarea 
-                className="box-border border-s-black border-solid border-4 rounded-2xl p-8 w-full h-full overflow-y-scroll"
+                className="border-s-black border-dotted border-l-2 pl-4 h-full w-full overflow-y-scroll"
                 id="textbox"
                 ref={textareaRef}
                 onKeyDown={KeydownHandler(textareaRef, socket.current!, auth)}
                 spellCheck="false" />
+            </div>
         </div>
     )
 }

@@ -14,7 +14,7 @@ export const UserView: React.FC = () => {
         const usernameList: User[] = [];
         const users = await fetchUsers();
 
-        if (users instanceof Response) {
+        if (users.ok) {
             const res = await users.json() as string[];
             if (res.length > 0) {
                 res.forEach(username => {

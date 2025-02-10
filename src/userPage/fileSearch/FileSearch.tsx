@@ -3,10 +3,12 @@ import { DocumentView } from "./DocumentView";
 import { DocumentPanel } from "./DocumentPanel";
 import { User } from "../userView/User";
 import { useFetch } from "../../network/useFetch";
+import { newActionI } from "../UserPage";
 
 interface FileSearchProps {
-    setCurrentDocument: (filename: string, owner: User) => void
-    refresh: [boolean, (b: boolean) => void]
+    setCurrentDocument: (filename: string, owner: User) => void,
+    newAction: newActionI,
+    setAction: (action: newActionI) => void
 } 
 
 export const FileSearch: React.FC<FileSearchProps> = (props) => {
@@ -24,38 +26,45 @@ export const FileSearch: React.FC<FileSearchProps> = (props) => {
 
     const searchFile = React.useCallback(async () => {
         const newDocs: DocumentView[] = [];
-        const result = await getFiles();
 
-        if (result instanceof Response) {
-            const res = await result.json() as string[];
-            if (res.length > 0) {
-                noFilesRef.current!.textContent = "";
-                res.forEach(fileInfo => {
-                    const info = fileInfo.split("/");
-                    const doc: DocumentView = {
-                        name: info[1],
-                        owner: info[0]
-                    }
-                    newDocs.push(doc);
-                })
-                setDocuments(newDocs);
+        if (username.length > 0) {
+            const result = await getFiles();
+
+            if (result.ok) {
+                const res = await result.json() as string[];
+                if (res.length > 0) {
+                    noFilesRef.current!.textContent = "";
+                    res.forEach(fileInfo => {
+                        const info = fileInfo.split("/");
+                        const doc: DocumentView = {
+                            name: info[1],
+                            owner: info[0]
+                        }
+                        newDocs.push(doc);
+                    })
+                    setDocuments(newDocs);
+                }
+                else {
+                    noFilesRef.current!.textContent = "No files for that user"
+                    setDocuments(newDocs);
+                }
             }
             else {
                 noFilesRef.current!.textContent = "No files for that user"
                 setDocuments(newDocs);
             }
         }
-        else{
-            console.log(result)
-        }
         
-    }, [setDocuments, getFiles]);
+    }, [setDocuments, getFiles, username]);
 
     React.useEffect(() => {
 
-        if(props.refresh[0]){
+        if(!props.newAction.completed){
             searchFile();
-            props.refresh[1](false);
+            props.setAction({
+                msg: props.newAction.msg,
+                completed: true
+            })
         }
 
     }, [props, searchFile])
@@ -68,7 +77,14 @@ export const FileSearch: React.FC<FileSearchProps> = (props) => {
             <p ref={noFilesRef} ></p>
             <div className="documents">
             {
-                documents.map((documentView, index) => <DocumentPanel key={index} document={documentView} setCurrentDocument={props.setCurrentDocument} refresh={searchFile} />)
+                documents.map((documentView, index) => 
+                <DocumentPanel 
+                    key={index} 
+                    document={documentView} 
+                    setCurrentDocument={props.setCurrentDocument} 
+                    refresh={searchFile}
+                    setAction={props.setAction} 
+                />)
             }
             </div>
         </div>

@@ -8,6 +8,9 @@
   margin-left: 15%;
   margin-top: 15%;
   background-color: #F7F7F7;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
 }
 
 .btnLayer{
@@ -67,6 +70,7 @@
   letter-spacing: 0.1ch;
   width: 40%;
   text-align: center;
+  margin: 0 auto
 }
 
 #usernameStartPageInput:not(:placeholder-shown) + .input-label {

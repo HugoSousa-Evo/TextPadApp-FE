@@ -14,8 +14,6 @@ export function useFetch(url: string, method: 'GET' | 'POST') {
             }
         }).then((res) => {
             return res;
-        }, (reason) => {
-            return Error(reason);
         });
 
     }, [url, auth, method]);

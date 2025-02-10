@@ -2,7 +2,7 @@ import React from "react";
 import { useAuth } from "../../auth/AuthProvider";
 import { useFetch } from "../../network/useFetch";
 
-export const UserActions: React.FC<{ setCreateFlag: (b: boolean) => void }> = (props) => {
+export const UserActions: React.FC<{ setActionFlag: (b: boolean, msg: string) => void }> = (props) => {
 
     const auth = useAuth();
 
@@ -28,14 +28,15 @@ export const UserActions: React.FC<{ setCreateFlag: (b: boolean) => void }> = (p
         if (filenameCreate !== undefined) {
             const result = await postFile();
 
-            if(result instanceof Response) {
+            if(result.ok) {
                 const res = await result.text();
-                //this log will eventually show up as a alert to the user
+                
                 console.log(res)
-                props.setCreateFlag(true);
+                props.setActionFlag(false, `The file "${filenameCreate}" was created`);
             }
             else {
                 console.log(result)
+                props.setActionFlag(true, "A file with that name already exists in your documents");
             }
         }
         else {
@@ -47,15 +48,18 @@ export const UserActions: React.FC<{ setCreateFlag: (b: boolean) => void }> = (p
         
         const result = await postInvite();
 
-        if (result instanceof Response) {
+        if (result.ok) {
             const res = await result.text();
             console.log(res);
+            props.setActionFlag(false, `The user ${userInvite} is now able to edit ${filenameInvite}`);
         }
         else {
             console.log(result);
+            props.setActionFlag(true, "The invite was not successful, " + 
+                "perhaps the document you are trying to access is not yours or the user you are trying to invite doesn't exist");
         }
         
-    }, [postInvite])
+    }, [postInvite, props, filenameInvite, userInvite])
 
     return (
         <div className="user-actions">
