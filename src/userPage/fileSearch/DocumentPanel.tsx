@@ -21,40 +21,50 @@ export const DocumentPanel: React.FC<DocumentPanelProps> = (props) => {
 
     const postDelete = useFetch(props.document.owner + "/deleteFile/" + props.document.name, 'POST');
 
+    // this is using the file contents endpoint, maybe add another endpoint or load the contents here and pass them directly to the textpad
+    const checkEditAccess = useFetch(props.document.name + "/file?owner=" + props.document.owner, 'GET');
+
     const deleteFile = React.useCallback(async () => {
         
-        const result = await postDelete();
-
-        if (result.ok) {
-            const res = await result.text();
-            console.log(res)
-            props.setAction({
-                msg: `The file "${props.document.name} was deleted"`,
-                completed: false
-            })
-            props.refresh();
-        } else { 
-            console.log(result);
-            props.setAction({completed: true, msg: "The file could not be deleted, either you are trying to delete a file you don't own " + 
-                "or the file doesn't exist"
-             });
-         }
+        postDelete(
+            async (result: Response) => {
+                const res = await result.text();
+                console.log(res)
+                props.setAction({
+                    msg: `The file "${props.document.name}" was deleted`,
+                    completed: false
+                })
+                props.refresh();
+            },
+            (result: Response) => {
+                console.log(result);
+                props.setAction({completed: true, msg: "The file could not be deleted, either you are trying to delete a file you don't own " + 
+                    "or the file doesn't exist"
+                 });
+            }
+        );
     
     }, [props, postDelete])
 
-    const editFile = React.useCallback(() => {
+    const editFile = React.useCallback(async () => {
 
-        //Missing access check
-
-        props.setCurrentDocument(props.document.name, {name: props.document.owner})
-        nav("/textpad")
+        checkEditAccess(
+            () => { 
+                props.setCurrentDocument(props.document.name, {name: props.document.owner})
+                nav("/textpad")
+            },
+            (result: Response) => {
+                console.log(result);
+                props.setAction({completed: true, msg: "You do not have permissions to edit this file"});
+            }
+        )
         
     }, [props, nav])
 
     return (
-        <div>
-            <h4>{props.document.name}</h4>
-            <h5>Owned by: {props.document.owner}</h5>
+        <div className="grid grid-cols-2 grid-rows-2">
+            <h4 className="text-center">{props.document.name}</h4>
+            <h5 className="text-center">Owned by: {props.document.owner}</h5>
             <button ref={deleteBtn} onClick={deleteFile} >Delete</button>
             <button ref={editBtn} onClick={editFile} >Edit</button>
         </div>

@@ -28,32 +28,36 @@ export const FileSearch: React.FC<FileSearchProps> = (props) => {
         const newDocs: DocumentView[] = [];
 
         if (username.length > 0) {
-            const result = await getFiles();
-
-            if (result.ok) {
-                const res = await result.json() as string[];
-                if (res.length > 0) {
-                    noFilesRef.current!.textContent = "";
-                    res.forEach(fileInfo => {
-                        const info = fileInfo.split("/");
-                        const doc: DocumentView = {
-                            name: info[1],
-                            owner: info[0]
-                        }
-                        newDocs.push(doc);
-                    })
-                    setDocuments(newDocs);
-                }
-                else {
+            getFiles(
+                async (result: Response) => {
+                    const res = await result.json() as string[];
+                    if (res.length > 0) {
+                        noFilesRef.current!.textContent = "";
+                        res.forEach(fileInfo => {
+                            const info = fileInfo.split("/");
+                            const doc: DocumentView = {
+                                name: info[1],
+                                owner: info[0]
+                            }
+                            newDocs.push(doc);
+                        })
+                        setDocuments(newDocs);
+                    }
+                    else {
+                        noFilesRef.current!.textContent = "No files for that user"
+                        setDocuments(newDocs);
+                    }
+                },
+                () => {
                     noFilesRef.current!.textContent = "No files for that user"
-                    setDocuments(newDocs);
+                        setDocuments(newDocs);
                 }
-            }
-            else {
+            );
+
+            } else {
                 noFilesRef.current!.textContent = "No files for that user"
                 setDocuments(newDocs);
             }
-        }
         
     }, [setDocuments, getFiles, username]);
 
@@ -70,12 +74,12 @@ export const FileSearch: React.FC<FileSearchProps> = (props) => {
     }, [props, searchFile])
 
     return (
-        <div className="FileSearch" >
+        <div className="w-full, h-full pl-8 pt-8" >
             <h3>Search user files</h3>
             <input id="user" type="text" placeholder="Enter Username" name="uname" onChange={onUsernameChange} />
             <button onClick={searchFile} >Search</button>
             <p ref={noFilesRef} ></p>
-            <div className="documents">
+            <div className="pt-8 flex flex-col flex-auto overflow-y-scroll">
             {
                 documents.map((documentView, index) => 
                 <DocumentPanel 

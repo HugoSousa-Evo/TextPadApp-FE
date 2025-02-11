@@ -18,16 +18,13 @@ export const Textpad: React.FC<TextpadProps> = (props) => {
 
     const fetchContents = useFetch(props.filename + "/file?owner=" + props.owner.name, 'GET')
 
-    const getFileContents = React.useCallback(async () => {
+    const getFileContents = React.useCallback(() => {
 
-        const contents = await fetchContents()
-        
-        if (contents instanceof Response) {
-            textareaRef.current!.value = await contents.text()
-        }
-        else {
-            console.log(contents)
-        }
+        fetchContents(
+            async (contents: Response) => { textareaRef.current!.value = await contents.text() },
+            (contents: Response) => { console.log(contents) }
+        )
+
     }, [fetchContents])
 
     // If there is time do this by websocket instead
@@ -37,19 +34,19 @@ export const Textpad: React.FC<TextpadProps> = (props) => {
     const fetchRoomUsers = useFetch(props.filename + "/currentUsers?owner=" + props.owner.name, 'GET')
 
     const getCurrentUsers = React.useCallback(async () => {
-        const result = await fetchRoomUsers()
-
-        if(result.ok) {
-            const users = await result.text()
-            setUsers(parseInt(users))
-        } else {
-            console.log("error on user load")
-        }
+        
+        fetchRoomUsers(
+            async (result: Response) => {
+                const users = await result.text()
+                setUsers(parseInt(users))
+            },
+            () => {console.log("error on user load")}
+        )
 
     }, [setUsers, fetchRoomUsers])
 
     const [hasLoaded, setLoad] = React.useState(false)
-    
+
     React.useEffect(() => {
         
         if(textareaRef.current !== null && !hasLoaded) {
@@ -81,7 +78,7 @@ export const Textpad: React.FC<TextpadProps> = (props) => {
         return () => socket.current?.close()
     }, [])
 
-    // add the possiblity to edit the title if owner ??
+    // add the possiblity to edit the title if owner ?
 
     return (
         <div className="flex-col px-12 pt-12  w-full">
@@ -98,12 +95,14 @@ export const Textpad: React.FC<TextpadProps> = (props) => {
                 </div>
             </div>
             <div className="box-border border-s-black border-solid border-4 rounded-2xl p-6 w-full h-5/6" >
-            <textarea 
-                className="border-s-black border-dotted border-l-2 pl-4 h-full w-full overflow-y-scroll"
-                id="textbox"
-                ref={textareaRef}
-                onKeyDown={KeydownHandler(textareaRef, socket.current!, auth)}
-                spellCheck="false" />
+                <textarea 
+                    className="border-s-black border-dotted border-l-2 pl-4 h-full w-full overflow-y-scroll"
+                    id="textbox"
+                    ref={textareaRef}
+                    onKeyDown={KeydownHandler(textareaRef, socket.current!, auth)}
+                    spellCheck="false" 
+                >
+                </textarea>
             </div>
         </div>
     )

@@ -5,16 +5,21 @@ export function useFetch(url: string, method: 'GET' | 'POST') {
 
     const auth = useAuth();
 
-    const makeRequest = React.useCallback(async () => {
+    const makeRequest = React.useCallback(async (
+        onSuccess: (r: Response) => void,
+        onError: (r: Response) => void
+    ) => {
 
-        return fetch(process.env.REACT_APP_SERVER_DOMAIN + url, {
+        const result = await fetch(process.env.REACT_APP_SERVER_DOMAIN + url, {
             method: method,
             headers: {
                 "Authorization":"Bearer " + auth.token
             }
-        }).then((res) => {
-            return res;
         });
+
+        if (result.ok) {
+            onSuccess(result)
+        } else { onError(result) }
 
     }, [url, auth, method]);
 

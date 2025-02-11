@@ -26,18 +26,18 @@ export const UserActions: React.FC<{ setActionFlag: (b: boolean, msg: string) =>
     const createFile = React.useCallback(async () => {
         // instead of this check maybe disable the button and show the message on the page
         if (filenameCreate !== undefined) {
-            const result = await postFile();
-
-            if(result.ok) {
-                const res = await result.text();
+            postFile(
+                async (result: Response) => {
+                    const res = await result.text();
                 
-                console.log(res)
-                props.setActionFlag(false, `The file "${filenameCreate}" was created`);
-            }
-            else {
-                console.log(result)
-                props.setActionFlag(true, "A file with that name already exists in your documents");
-            }
+                    console.log(res)
+                    props.setActionFlag(false, `The file "${filenameCreate}" was created`);
+                },
+                (result: Response) => { 
+                    console.log(result)
+                    props.setActionFlag(true, "A file with that name already exists in your documents");
+                }
+            );
         }
         else {
             console.log("not a valid filename")
@@ -46,18 +46,18 @@ export const UserActions: React.FC<{ setActionFlag: (b: boolean, msg: string) =>
 
     const inviteUser = React.useCallback(async () => {
         
-        const result = await postInvite();
-
-        if (result.ok) {
-            const res = await result.text();
-            console.log(res);
-            props.setActionFlag(false, `The user ${userInvite} is now able to edit ${filenameInvite}`);
-        }
-        else {
-            console.log(result);
-            props.setActionFlag(true, "The invite was not successful, " + 
+        postInvite(
+            async (result: Response) => {
+                const res = await result.text();
+                console.log(res);
+                props.setActionFlag(false, `The user ${userInvite} is now able to edit ${filenameInvite}`);
+            },
+            (error: Response) => {
+                console.log(error);
+                props.setActionFlag(true, "The invite was not successful, " + 
                 "perhaps the document you are trying to access is not yours or the user you are trying to invite doesn't exist");
-        }
+            }
+        );
         
     }, [postInvite, props, filenameInvite, userInvite])
 

@@ -14,6 +14,8 @@ export const MessageLog: React.FC<{ newMessage: string }> = (props) => {
     }, [messageLogRef])
 
     React.useEffect(() => {
+
+        // rework this later
         if (props.newMessage !== lastMessage) {
             insertNewMessage(props.newMessage);
             setLastMessage(props.newMessage);
@@ -25,9 +27,8 @@ export const MessageLog: React.FC<{ newMessage: string }> = (props) => {
             <textarea 
             ref={messageLogRef} 
             disabled={true}
-            className="border-s-black border-dotted border-l-2 pl-4 h-full w-full overflow-y-scroll"
-            
-             />
+            className="border-black border-2 pl-4 h-full w-full overflow-y-scroll"
+            />
         </div>
     )
 }
