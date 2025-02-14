@@ -1,9 +1,8 @@
-import React from "react";
+
 import { WebsocketController } from "../network/WebsocketController";
 import { Insert } from "./operations/Insert";
 import { Delete } from "./operations/Delete";
 import { AuthContextI } from "../auth/AuthProvider";
-import { RefMDEditor } from "@uiw/react-md-editor";
 
 export const KeydownHandler = (
     editor: HTMLTextAreaElement,

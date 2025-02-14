@@ -5,12 +5,10 @@ import { StartPage } from './startPage/StartPage';
 import { Textpad, TextpadProps } from './textpad/Textpad';
 import { UserPage } from './userPage/UserPage';
 import PrivateRoute from './auth/PrivateRoute';
-import React, { useState } from 'react';
+import React from 'react';
 import { User } from './userPage/userView/User';
 
 function App() {
-
-  const [theme, setTheme] = useState('light');
 
   const [currentDocument, setCurrentDocument] = React.useState<TextpadProps>({
     filename: "",

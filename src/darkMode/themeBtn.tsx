@@ -9,12 +9,12 @@ export const ThemeBtn: React.FC = () => {
         setTheme(t)
 
         if (t === 'dark') {
-            document.body.classList.add('dark')
+            document.body.classList.toggle("dark", true)
         } else {
-            document.body.classList.remove('dark')
+            document.body.classList.toggle("dark", false)
         }
 
-    }, [theme, setTheme])
+    }, [setTheme])
 
     React.useEffect(() => {
         // Add listener to update styles
@@ -27,7 +27,7 @@ export const ThemeBtn: React.FC = () => {
         return () => {
             window.matchMedia('(prefers-color-scheme: dark)').removeEventListener('change', () => {});
         }
-    }, []);
+    }, [changeTheme]);
 
     return (
     

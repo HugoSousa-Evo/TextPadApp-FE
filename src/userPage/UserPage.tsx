@@ -29,7 +29,7 @@ export const UserPage: React.FC<UserPageProps> = (props) => {
             setUser(auth.currentUser.name)
         }
 
-    }, [user])
+    }, [user, auth])
 
     return (
         <div className="grid grid-cols-2 grid-rows-[0.4fr_1.3fr_1.3fr]" >
