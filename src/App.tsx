@@ -5,10 +5,12 @@ import { StartPage } from './startPage/StartPage';
 import { Textpad, TextpadProps } from './textpad/Textpad';
 import { UserPage } from './userPage/UserPage';
 import PrivateRoute from './auth/PrivateRoute';
-import React from 'react';
+import React, { useState } from 'react';
 import { User } from './userPage/userView/User';
 
 function App() {
+
+  const [theme, setTheme] = useState('light');
 
   const [currentDocument, setCurrentDocument] = React.useState<TextpadProps>({
     filename: "",
@@ -19,22 +21,22 @@ function App() {
     <div className="App">
 
       <BrowserRouter>
-        <AuthProvider>
-          <Routes>
-            <Route path='' element={<Navigate to="/startpage" />} />
+          <AuthProvider>
+            <Routes>
+              <Route path='' element={<Navigate to="/startpage" />} />
 
-            <Route path='startpage' element={<StartPage />} />
+              <Route path='startpage' element={<StartPage />} />
 
-            <Route element={<PrivateRoute />} >
-              <Route path='userpage' element={ <UserPage setCurrentDocument={(filename:string, owner:User) => setCurrentDocument({
-                filename: filename,
-                owner: owner
-              })} />} />
-              <Route path='textpad' element={ <Textpad {...currentDocument} />} />
-            </Route>
+              <Route element={<PrivateRoute />} >
+                <Route path='userpage' element={ <UserPage setCurrentDocument={(filename:string, owner:User) => setCurrentDocument({
+                  filename: filename,
+                  owner: owner
+                })} />} />
+                <Route path='textpad' element={ <Textpad {...currentDocument} />} />
+              </Route>
 
-          </Routes>
-        </AuthProvider>
+            </Routes>
+          </AuthProvider>
       </BrowserRouter>
     </div>
   );

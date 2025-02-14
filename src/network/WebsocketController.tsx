@@ -39,7 +39,8 @@ export class WebsocketController {
 
     public close() { 
         if (this.socket.OPEN) {
-            this.socket.send(new Close().toJson())
+            this.socket.close()
+            //this.socket.send(new Close().toJson())
         }
      }
 } 

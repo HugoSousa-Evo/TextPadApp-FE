@@ -5,6 +5,7 @@ import { User } from "./userView/User";
 import { UserActions } from "./userActions/UserActions";
 import { MessageLog } from "./messageLog/MessageLog";
 import { useAuth } from "../auth/AuthProvider";
+import { ThemeBtn } from "../darkMode/themeBtn";
 
 interface UserPageProps {
     setCurrentDocument: (filename: string, owner: User) => void
@@ -18,16 +19,24 @@ export interface newActionI {
 export const UserPage: React.FC<UserPageProps> = (props) => {
 
     const [newAction, setNewAction] = React.useState<newActionI>({completed: true, msg: ""});
+    const [user, setUser] = React.useState("")
+
     const auth = useAuth()
+
+    React.useEffect(() => {
+
+        if(user.length === 0) {
+            setUser(auth.currentUser.name)
+        }
+
+    }, [user])
 
     return (
         <div className="grid grid-cols-2 grid-rows-[0.4fr_1.3fr_1.3fr]" >
             <h3  
                 className="my-auto ml-8"
             >{auth.currentUser.name}'s Page</h3>
-            <button 
-                className="border-2 border-black rounded-md text-center w-12 h-10 hover:bg-slate-200" 
-            >D</button>
+            <ThemeBtn />
             <UserActions setActionFlag={(b: boolean, msg: string) => setNewAction({
                 completed: b,
                 msg: msg
