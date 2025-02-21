@@ -65,25 +65,35 @@ export const StartPage: React.FC = () => {
             <div className="text-end" >
                 <ThemeBtn />
             </div>
-            <div className="StartPage" >
+            <div className="border-black border-double border-4 rounded-2xl w-8/12 h-3/5 text-center mx-auto mt-32 bg-[#F7F7F7] flex flex-col justify-evenly" >
 
-                <h2>Welcome to Textpad Collab</h2>
+                <h2 className="" >Welcome to Textpad Collab</h2>
 
-                <label id="usernameStartPage" htmlFor="usernameStartPageInput"><h5>To start please enter your Username below:</h5></label>
+                <label id="usernameStartPage" htmlFor="usernameStartPageInput"><h5 className="" >To start please enter your Username below:</h5></label>
                 <input id="usernameStartPageInput" type="text" placeholder="Enter Username" name="uname" onChange={onUsernameChange} required />
                 {username === undefined && (
-                    <p>Username should have between 3 and 12 characters</p>
+                    <p className="">Username should have between 3 and 12 characters</p>
                 )}
 
-                <div className="btnLayer">
+                <div className="flex justify-evenly">
                     <div>
-                        <label id="usernameStartPage" htmlFor="signinButton"><h5>I'm new here</h5></label>
-                        <button id="signinButton" className="StartPageButton" ref={signInBtn} onClick={signUser} type="submit" > Register </button>
+                        <label id="usernameStartPage" htmlFor="signinButton"><h5 className="">I'm new here</h5></label>
+                        <button 
+                        id="signinButton" 
+                        className="StartPageButton mt-4 h-15 w-36 bg-white border-2 border-solid border-[#222222] rounded-lg text-[#222222] cursor-pointer inline-block m-0 px-4 py-2" 
+                        ref={signInBtn} 
+                        onClick={signUser} 
+                        type="submit" > Register </button>
                     </div>
 
                     <div>
-                        <label id="usernameStartPage" htmlFor="loginButton"><h5>I have an account</h5></label>
-                        <button id="loginButton" className="StartPageButton" ref={logInBtn} onClick={logUser} type="submit" > Login </button>
+                        <label id="usernameStartPage" htmlFor="loginButton"><h5 className="">I have an account</h5></label>
+                        <button 
+                        id="loginButton" 
+                        className="StartPageButton mt-4 h-15 w-36 bg-white border-2 border-solid border-[#222222] rounded-lg text-[#222222] cursor-pointer inline-block m-0 px-4 py-2" 
+                        ref={logInBtn} 
+                        onClick={logUser} 
+                        type="submit" > Login </button>
                     </div>
                 </div>
             </div>

@@ -53,6 +53,7 @@ export const UserView: React.FC<UserViewProps> = (props) => {
             );
         }
         else {
+            alert("Please select a user from the list")
             // alert select user
         }
         

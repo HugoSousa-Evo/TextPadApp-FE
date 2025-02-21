@@ -143,7 +143,7 @@ export const Textpad: React.FC<TextpadProps> = (props) => {
             </div>
             <div className="flex-col px-12 h-5/6 w-full">
                 <div className="" >
-                    <h2 className="pl-12 pb-2 underline border-dotted border-6 border-black" >{props.filename}</h2>
+                    <h2 className="pl-12 pb-2 underline" >{props.filename}</h2>
                     <MarkdownOptions editor={textareaRef.current!} socket={socket.current!} user={auth.currentUser} setContents={(s: string) => setContents(s)} />
                 </div>
                 <div className="flex flex-row box-border border-s-black border-solid border-4 rounded-2xl p-6 w-full h-full" >

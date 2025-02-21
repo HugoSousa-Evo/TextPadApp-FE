@@ -33,7 +33,7 @@ export const ThemeBtn: React.FC = () => {
 
     return (
     
-        <button className="border-2 border-black rounded-md py-1.5 px-4  hover:bg-slate-200 justify-self-end h-10 mr-2 mt-2" 
+        <button className="border-2 border-black rounded-md py-1.5 px-4  hover:bg-slate-200 justify-self-end h-10 mr-2 mt-2 dark:bg-white" 
         onClick={_ => theme === 'dark' ? changeTheme('light') : changeTheme('dark')}
         >
             {

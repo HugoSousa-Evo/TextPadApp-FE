@@ -33,12 +33,13 @@ export const UserActions: React.FC<{refresh: () => Promise<void>}> = (props) => 
                 },
                 (result: Response) => { 
                     console.log(result)
+                    alert(`A file with that name already exists in your documents`)
                     //props.setActionFlag(true, "A file with that name already exists in your documents");
                 }
             );
         }
         else {
-            console.log("not a valid filename")
+            console.log("Not a valid filename")
         }
     }, [filenameCreate, postFile])
 

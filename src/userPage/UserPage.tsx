@@ -4,7 +4,7 @@ import { User } from "../textpad/userView/User";
 import { UserActions } from "./userActions/UserActions";
 import { useAuth } from "../auth/AuthProvider";
 import { ThemeBtn } from "../extras/themeBtn";
-import { DocumentView } from "./fileSearch/DocumentView";
+import { DocumentParams } from "./fileSearch/DocumentParams";
 import { useFetch } from "../network/useFetch";
 
 interface UserPageProps {
@@ -17,14 +17,14 @@ export const UserPage: React.FC<UserPageProps> = (props) => {
 
     const auth = useAuth()
 
-    const [userOwnedDocuments, setUserDocuments] = React.useState<DocumentView[]>([])
-    const [userSharedDocuments, setSharedDocuments] = React.useState<DocumentView[]>([])
+    const [userOwnedDocuments, setUserDocuments] = React.useState<DocumentParams[]>([])
+    const [userSharedDocuments, setSharedDocuments] = React.useState<DocumentParams[]>([])
 
     const getFiles = useFetch(auth.currentUser.name + "/listFiles", 'GET');
 
     const searchFile = React.useCallback(async () => {
-        const userDocs: DocumentView[] = [];
-        const sharedDocs: DocumentView[] = [];
+        const userDocs: DocumentParams[] = [];
+        const sharedDocs: DocumentParams[] = [];
 
         getFiles(
             async (result: Response) => {
@@ -32,7 +32,7 @@ export const UserPage: React.FC<UserPageProps> = (props) => {
                 
                 res.forEach(fileInfo => {
                     const info = fileInfo.split("/");
-                    const doc: DocumentView = {
+                    const doc: DocumentParams = {
                         name: info[1],
                         owner: info[0]
                     }
@@ -63,12 +63,12 @@ export const UserPage: React.FC<UserPageProps> = (props) => {
     }, [user, auth, searchFile, setUser])
 
     return (
-        <div className="grid grid-cols-2 grid-rows-[0.4fr_1fr_1.6fr] m-6 w-full" >
+        <div className="grid grid-cols-2 grid-rows-[0.4fr_1fr_1.6fr] p-6 w-full" >
             <h3  className="ml-2 pt-6"
-            ><b>{user}'s Page</b></h3>
+            ><b>{user}'s User Page</b></h3>
             <ThemeBtn />
             <div className="row-span-2 mx-4">
-                <h4><b>My files</b></h4>
+                <h4 className=""><b>My files</b></h4>
                 <hr className="mt-2"></hr>
                 <FileView 
                     documents={userOwnedDocuments}
@@ -78,7 +78,7 @@ export const UserPage: React.FC<UserPageProps> = (props) => {
             </div>
             <UserActions refresh={searchFile} />
             <div className="mx-4">
-                <h4><b>Shared with me</b></h4>
+                <h4 className=""><b>Shared with me</b></h4>
                 <hr className="mt-2"></hr>
                 <FileView 
                     documents={userSharedDocuments}

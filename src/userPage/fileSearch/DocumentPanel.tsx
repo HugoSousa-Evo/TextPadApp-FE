@@ -1,11 +1,11 @@
 import React from "react";
-import { DocumentView } from "./DocumentView";
+import { DocumentParams } from "./DocumentParams";
 import { useNavigate } from "react-router";
 import { User } from "../../textpad/userView/User";
 import { useFetch } from "../../network/useFetch";
 
 interface DocumentPanelProps {
-    document: DocumentView
+    document: DocumentParams
     setCurrentDocument: (filename: string, owner: User) => void,
     refresh: () => Promise<void>
 }

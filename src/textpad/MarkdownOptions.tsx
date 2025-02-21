@@ -20,7 +20,7 @@ export const MarkdownOptions: React.FC<MarkdownOptionsProps> = (props) => {
     ) => { 
         return () => {
             const sStart = editor.selectionStart, sEnd = editor.selectionEnd, end = editor.value.length;
-            const withTagRemoved = editor.value.substring(sStart,sEnd).replaceAll(/<[a-zA-Z]+>|<\/[a-zA-Z]>/g, "")
+            const withTagRemoved = editor.value.substring(sStart,sEnd).replaceAll(/<[a-zA-Z]+>|<\/[a-zA-Z]+>/g, "")
     
             editor.value = editor.value.substring(0, sStart) + withTagRemoved + editor.value.substring(sEnd, end)
     
@@ -37,12 +37,12 @@ export const MarkdownOptions: React.FC<MarkdownOptionsProps> = (props) => {
     return (
         <div className="text-right mr-4 mb-1">
             <button 
-            className="border-2 border-black rounded-md py-1 px-4  hover:bg-slate-200 active:bg-slate-100 font-extrabold"
+            className="border-2 border-black rounded-md py-1 px-4  hover:bg-slate-200 active:bg-slate-100"
             onClick={_ => {
                 removeMarkdown(props.editor, props.socket, props.user)()
                 props.setContents(props.editor.value)
             }}
-            >clear</button>
+            >Clear</button>
 
             <MarkdownBtn style="font-extrabold" tag="b" components={props} />
             <MarkdownBtn style="italic" tag="i" components={props} />

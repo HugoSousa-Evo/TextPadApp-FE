@@ -1,10 +1,10 @@
 import React from "react";
-import { DocumentView } from "./DocumentView";
+import { DocumentParams } from "./DocumentParams";
 import { DocumentPanel } from "./DocumentPanel";
 import { User } from "../../textpad/userView/User";
 
 interface FileViewProps {
-    documents: DocumentView[],
+    documents: DocumentParams[],
     refresh: () => Promise<void>,
     setCurrentDocument: (filename: string, owner: User) => void
 } 
