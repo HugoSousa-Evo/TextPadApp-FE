@@ -6,7 +6,7 @@ import { Textpad, TextpadProps } from './textpad/Textpad';
 import { UserPage } from './userPage/UserPage';
 import PrivateRoute from './auth/PrivateRoute';
 import React from 'react';
-import { User } from './userPage/userView/User';
+import { User } from './textpad/userView/User';
 
 function App() {
 

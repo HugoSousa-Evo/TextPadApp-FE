@@ -14,7 +14,6 @@
   --h2: calc(var(--scaleFactor) * var(--h3));
   --h1: calc(var(--scaleFactor) * var(--h2));
 
-  /*background-image: url("/public/ylp.jpeg");*/
 }
 
 h1 {
@@ -35,7 +34,6 @@ h5 {
 
 .App * {
   font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
-  /*text-align: center;*/
 }
 
 html, body, #root {

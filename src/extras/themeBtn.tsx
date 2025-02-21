@@ -1,4 +1,6 @@
 import React from "react"
+import { IoMoon } from "react-icons/io5"
+import { IoSunny } from "react-icons/io5"
 
 export const ThemeBtn: React.FC = () => {
 
@@ -31,8 +33,15 @@ export const ThemeBtn: React.FC = () => {
 
     return (
     
-        <button className="border-2 border-black rounded-md py-1.5 px-4  hover:bg-slate-200" 
+        <button className="border-2 border-black rounded-md py-1.5 px-4  hover:bg-slate-200 justify-self-end h-10 mr-2 mt-2" 
         onClick={_ => theme === 'dark' ? changeTheme('light') : changeTheme('dark')}
-        >D</button>
+        >
+            {
+                theme === 'dark' && <IoSunny />
+            }
+            {
+                theme === 'light' && <IoMoon />
+            }
+        </button>
     )
 }

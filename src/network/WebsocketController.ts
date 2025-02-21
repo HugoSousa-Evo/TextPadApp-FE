@@ -1,5 +1,5 @@
 
-import { User } from "../userPage/userView/User"
+import { User } from "../textpad/userView/User"
 
 export class WebsocketController {
 

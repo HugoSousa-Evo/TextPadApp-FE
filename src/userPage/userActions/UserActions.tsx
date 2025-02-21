@@ -2,16 +2,13 @@ import React from "react";
 import { useAuth } from "../../auth/AuthProvider";
 import { useFetch } from "../../network/useFetch";
 
-export const UserActions: React.FC<{ setActionFlag: (b: boolean, msg: string) => void }> = (props) => {
+export const UserActions: React.FC<{refresh: () => Promise<void>}> = (props) => {
 
     const auth = useAuth();
 
     const [filenameCreate, setFilenameCreate] = React.useState<string | undefined>(undefined);
-    const [userInvite, setUserInvite] = React.useState("");
-    const [filenameInvite, setFilenameInvite] = React.useState("");
 
     const postFile = useFetch(auth.currentUser.name + "/createFile/" + filenameCreate, 'POST');
-    const postInvite = useFetch("invite?guest="+ userInvite + "&filename=" + filenameInvite, 'POST');
 
     const filenameCreateChange = React.useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
         const newFilename = e.currentTarget.value;
@@ -29,55 +26,34 @@ export const UserActions: React.FC<{ setActionFlag: (b: boolean, msg: string) =>
             postFile(
                 async (result: Response) => {
                     const res = await result.text();
-                
+                    props.refresh();
                     console.log(res)
-                    props.setActionFlag(false, `The file "${filenameCreate}" was created`);
+                    alert(`The file "${filenameCreate}" was created`)
+                    //props.setActionFlag(false, `The file "${filenameCreate}" was created`);
                 },
                 (result: Response) => { 
                     console.log(result)
-                    props.setActionFlag(true, "A file with that name already exists in your documents");
+                    //props.setActionFlag(true, "A file with that name already exists in your documents");
                 }
             );
         }
         else {
             console.log("not a valid filename")
         }
-    }, [filenameCreate, props, postFile])
-
-    const inviteUser = React.useCallback(async () => {
-        
-        postInvite(
-            async (result: Response) => {
-                const res = await result.text();
-                console.log(res);
-                props.setActionFlag(false, `The user ${userInvite} is now able to edit ${filenameInvite}`);
-            },
-            (error: Response) => {
-                console.log(error);
-                props.setActionFlag(true, "The invite was not successful, " + 
-                "perhaps the document you are trying to access is not yours or the user you are trying to invite doesn't exist");
-            }
-        );
-        
-    }, [postInvite, props, filenameInvite, userInvite])
+    }, [filenameCreate, postFile])
 
     return (
-        <div className="user-actions">
-            <div>
-                <label><b>Create a file</b></label>
-                <input id="create" type="text" placeholder="Enter Filename" name="create" onChange={filenameCreateChange} />
-
-                <button onClick={createFile} type="submit" >Create</button>
-            </div>
-            <div>
-                <label><b>Allow user to edit file you own</b></label>
-                <input id="guest" type="text" placeholder="Enter Guest Username" name="guest" onChange={
-                    (e) => setUserInvite(e.currentTarget.value)
-                    } />
-                <input id="ownedFile" type="text" placeholder="Enter Filename" name="ownedFile" onChange={
-                    (e) => setFilenameInvite(e.currentTarget.value)
-                    } />
-                <button onClick={inviteUser} type="submit" >Allow</button>
+        <div className="m-6">
+            <h4 className="mt-6" ><b>Create a file</b></h4>
+            <div className="flex flex-grow">
+                <input id="create" type="text" placeholder="Enter Filename" name="create" onChange={filenameCreateChange} 
+                    className="mt-4 shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                />
+                <button onClick={createFile} type="submit" 
+                className="mt-4 w-auto text-center min-w-[100px] px-6 py-4 text-white transition-all bg-gray-700 dark:bg-white dark:text-gray-800 rounded-md shadow-md sm:w-auto hover:bg-gray-900 hover:text-white shadow-neutral-00 dark:shadow-neutral-700 hover:shadow-md hover:shadow-neutral-400 hover:-tranneutral-y-px"
+                >
+                    Create
+                </button>
             </div>
         </div>
     )

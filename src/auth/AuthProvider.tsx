@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { User } from "../userPage/userView/User";
+import { User } from "../textpad/userView/User";
 
 export interface AuthContextI {
     token: string,

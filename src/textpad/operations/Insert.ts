@@ -1,4 +1,4 @@
-import { User } from "../../userPage/userView/User";
+import { User } from "../userView/User";
 import { Operation } from "./Operation";
 
 export class Insert extends Operation {
